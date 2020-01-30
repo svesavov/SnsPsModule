@@ -1,0 +1,653 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SnsPsModule</name>
+    </assembly>
+    <members>
+        <member name="T:SnsPsModule.ConvertFromSnsIADsLargeInteger">
+            <summary>
+            <para type="synopsis">
+                Converts Specific For Active Directory IADsLargeInteger Objects To Regular System.Int64 Struct.
+            </para>
+            <para type="description">
+                Converts Specific For Active Directory IADsLargeInteger Objects To Regular System.Int64 Struct.
+            </para>
+            <para type="description">
+                NOTE: The IADsLargeInteger Values Usually Cannot Be Taken Directly From The AD Object Property Which Contains
+                IADsLargeInteger Value Type. Normally Those AD Properties Are Presented As COM Objects, Which Have "Value"
+                Property. The Command-Let Will Expect The Value Taken From The "Value" Property Of The AD Object Property.
+                Please Refer To The Example Below.
+            </para>
+            <list type="alertSet">
+                <item>
+                    <description>
+                        <para>AUTHOR:    Svetoslav Nedyalkov Savov (svesavov@hotmail.com)</para>
+                        <para>COPYRIGHT: (c) 2020 Svetoslav Nedyalkov Savov, all rights reserved.</para>
+                        <para>THIS CODE IS MADE AVAILABLE AS IS, WITHOUT WARRANTY OF ANY KIND. THE ENTIRE RISK</para>
+                        <para>OF THE USE OR THE RESULTS FROM THE USE OF THIS CODE REMAINS WITH THE USER.</para>
+                    </description>
+                </item>
+            </list>
+            <example>
+              <code>[System.Int64[]]$intPwdLastSet = ConvertFrom-SnsIADsLargeInteger $AdsiUser.pwdLastSet.Value;</code>
+            </example>
+            <example>
+              <code>[System.DateTime]$datPwdLastSet = ([System.DateTime]'1601-01-01').AddTicks($(ConvertFrom-SnsIADsLargeInteger $AdsiUser.pwdLastSet.Value)).ToLocalTime();</code>
+            </example>
+            <example>
+              <code>[System.DateTime]$datPwdLastSet = [System.DateTime]::FromFileTime($(ConvertFrom-SnsIADsLargeInteger $([ADSI]"LDAP://$($strDN)").pwdLastSet.Value));</code>
+            </example>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.ConvertFromSnsIADsLargeInteger.IADsLargeIntegerValue">
+            <summary>
+            <para type="description">Specifies An Active Directory IADsLargeInteger Value</para>
+            <para type="description">Keep In Mind That ADSI Properties Are Hash Tables And Value Property Shall Be Used</para>
+            <para type="description">like $objAdsiAccount.pwdLastSet.Value</para>
+            </summary>
+        </member>
+        <member name="T:SnsPsModule.ConvertFromSnsIpAddressString">
+            <summary>
+            <para type="synopsis">
+                This CmdLet Converts IP V4 Address String To System.UInt32
+            </para>
+            <para type="description">
+                This CmdLet Converts IP V4 Address String To System.UInt32
+            </para>
+            <list type="alertSet">
+                <item>
+                    <description>
+                        <para>AUTHOR:    Svetoslav Nedyalkov Savov (svesavov@hotmail.com)</para>
+                        <para>COPYRIGHT: (c) 2020 Svetoslav Nedyalkov Savov, all rights reserved.</para>
+                        <para>THIS CODE IS MADE AVAILABLE AS IS, WITHOUT WARRANTY OF ANY KIND. THE ENTIRE RISK</para>
+                        <para>OF THE USE OR THE RESULTS FROM THE USE OF THIS CODE REMAINS WITH THE USER.</para>
+                    </description>
+                </item>
+            </list>
+            <example>
+              <code>[System.UInt32[]]$IpNumeric = ConvertFrom-SnsIpAddressString -IpAddress '192.168.1.1';</code>
+            </example>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.ConvertFromSnsIpAddressString.IpAddress">
+            <summary>
+            <para type="description">Specifies IP V4 String</para>
+            </summary>
+        </member>
+        <member name="T:SnsPsModule.GetSnsWebPage">
+            <summary>
+            <para type="synopsis">This CmdLet Extract HTML Content From A Web Page As A String.</para>
+            <para type="description">This CmdLet Extract HTML Content From A Web Page As A String.</para>
+            <para type="description">
+                The Main Reason This Command-Let To Be Developed Is The Fact That Invoke-WebRequest Native PowerShell Command Is
+                Running Within Own Run Space Which Does Not Inherit The Parent Run Space Settings. Invoke-WebRequest Command Does
+                Not Have Parameters To Skip The Certificates Checks Before PowerShell 6.0. With Other Words On Machines With
+                PowerShell Before 6.0 Without External Internet Access On HTTP Protocol Cannot Be Verified The Revocation Lists Of
+                The HTTPS Certificates.
+            </para>
+            <para type="description">
+                The Get-WebPage Command-Let Can Connect To Web Pages With Or Without Authentication. In Order This To Be Possible
+                The Command-Let Was Developed With 3 ParameterSets.
+            </para>
+            <para type="description">
+                --ParameterSet "Credential" - In This ParameterSet The User Have To Provide WebPage URL, A Valid PSCredential
+                Object, Login URL, The Name Of The UserName And Password Textboxes As They Are Named In The Login Form Of The
+                Destination WebPage.
+            </para>
+            <para type="description">
+                --ParameterSet "UserAndPass" - In This ParameterSet The User Have To Provide WebPage URL, UserName, Password In
+                Clear Text, Login URL, The Name Of The UserName And Password Textboxes As They Are Named In The Login Form Of The
+                Destination WebPage. Providing The Password In Clear Text Is Not A Security Concern As It Is Not Stored Anywhere
+                On The Computer. The Password Is Kept Into The Computer Memory For The Duration Of The Command Run And Then Is
+                Destroyed. However Usage In That Parameter Set In Scripts Can Be Security Concern As Long As The Password Have To
+                Be Sored Unencrypted Somewhere And Provided To The Command-Let.
+            </para>
+            <para type="description">
+                --ParameterSet "Anonymous" - This ParameterSet Is Used For Webpage Which Does Not Require Authentication. The User
+                Will Need To Provide Only The WebPage URL.
+            </para>
+            <para type="description">
+                At The Very Beginning The Command-Let Connects To The Provided LoginUrl And Extract From There An Access Cookie
+                Which Is Used Afterward To Be Accessed The WebPage URL. The Access Cookie Is Preserved In The Computers Memory For
+                The Duration Of The Command-Let Run And Can Be Used For Accessing Of Multiple Pages That Can Accept This Cookie,
+                As Long As The WebPage URL's Are Provided As Collection. The Output Strings Collection Is Reverted In The Same
+                Order As The Webpage URL's Are Provided.
+            </para>
+            <list type="alertSet">
+                <item>
+                    <description>
+                        <para>AUTHOR:    Svetoslav Nedyalkov Savov (svesavov@hotmail.com)</para>
+                        <para>COPYRIGHT: (c) 2020 Svetoslav Nedyalkov Savov, all rights reserved.</para>
+                        <para>THIS CODE IS MADE AVAILABLE AS IS, WITHOUT WARRANTY OF ANY KIND. THE ENTIRE RISK</para>
+                        <para>OF THE USE OR THE RESULTS FROM THE USE OF THIS CODE REMAINS WITH THE USER.</para>
+                    </description>
+                </item>
+            </list>
+            <example>
+              <code>[System.String[]]$strHtml = Get-SnsWebPage -Credential (Get-Credential) -FormUserNameField 'username' -FormPasswordField 'password' -LoginUrl 'https://contoso.com/dologin.action' -Url 'https://contoso.com';</code>
+              <para>Gets Web Page HTML Using Credentials Which Have To Be Provided By The User.</para>
+              <para>To Get The Form TextBox Names Have To Be Checked In Advance The Source Of The Logon Page With Some Browser.</para>
+              <para></para>
+            </example>
+            <example>
+              <code>[System.String[]]$strHtml = Get-SnsWebPage -UserName 'CONTOSO\JohnSmith' -FormUserNameField 'username' -Password 'Pa$$w0rd' -FormPasswordField 'password' -LoginUrl 'https://contoso.com/dologin.action' -Url 'https://contoso.com';</code>
+              <para>Gets Web Page HTML Using Specified UserName And Password.</para>
+              <para>To Get The Form TextBox Names Have To Be Checked In Advance The Source Of The Logon Page With Some Browser.</para>
+              <para></para>
+            </example>
+            <example>
+              <code>[System.String[]]$strHtml = Get-SnsWebPage -Url 'https://contoso.com';</code>
+              <para>Gets Web Page HTML From A WebPage Without Logon.</para>
+              <para></para>
+            </example>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.GetSnsWebPage.Credential">
+            <summary>
+            <para type="description">Specifies The WebPage Credential Object</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.GetSnsWebPage.UserName">
+            <summary>
+            <para type="description">Specifies The WebPage Username In Clear Text</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.GetSnsWebPage.Password">
+            <summary>
+            <para type="description">Specifies The WebPage Password In Clear Text</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.GetSnsWebPage.FormUserNameField">
+            <summary>
+            <para type="description">Specifies The WebPage Username Textbox Name As It Is Named In The Login Page Form</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.GetSnsWebPage.FormPasswordField">
+            <summary>
+            <para type="description">Specifies The WebPage Password Textbox Name As It Is Named In The Login Page Form</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.GetSnsWebPage.LoginUrl">
+            <summary>
+            <para type="description">Specifies The WebPage LoginUrl</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.GetSnsWebPage.Url">
+            <summary>
+            <para type="description">Specifies The WebPage Universal Resource Locator</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.GetSnsWebPage.Anonymous">
+            <summary>
+            <para type="description">Specifies To The Command-Let That The WebPage Does Not Require Authentication And Shall Be Accessed Directly</para>
+            </summary>
+        </member>
+        <member name="T:SnsPsModule.InvokeSnsSQLQuery">
+            <summary>
+            <para type="synopsis">
+                This Cmdlet Connect To A Specified SQL Server And SQL DataBase, Executes A SQL Query Against The DataBase, Revert
+                The Output In DataSet Collection And Close The SQL Session.
+            </para>
+            <para type="description">
+                This Cmdlet Connect To A Specified SQL Server And SQL DataBase, Executes A SQL Query Against The DataBase, Revert
+                The Output In DataSet Collection And Close The SQL Session.
+            </para>
+            <para type="description">
+                The CmdLet Have Three Parameter Sets, Related With The Authentication Options To Establish A SQL Connection:
+            </para>
+            <para type="description">
+                -- LogOnSession Parameter Set Is Used Whenever The User Who Invokes The CmdLet Have The Required Access Rights In
+                The SQL DataBase And Users Windows LogOnSession Have To Be Used Against The SQL Connection.
+            </para>
+            <para type="description">
+                -- UserAndPass Parameter Set Is Used Whenever Have To Be Provided UserName And Password In Clear Text To The
+                Function Parameter, In Order They To Be Included In The SQL Connection String (The SQL Connection Object). The
+                Connection String Is Created In A Way That The Extraction Of The Password From The SCQL Connection Object Over The
+                Network Is Not Possible.
+            </para>
+            <para type="description">
+                -- Credentials Parameter Set Is Used Whenever Credential Custom Object Is Provided To The SQL Connection Object.
+                The Function Require A [System.Management.Automation.PSCredential] Object, Which Is Converted Within The Function
+                To [System.Data.SqlClient.SqlCredential] Object Which Is Prerequisite To Establish SQL Connection. In That Way No
+                Password In Clear Text Is Provided To The Function.
+            </para>
+            <para type="description">
+                Whenever It Is Specified A Collection Of Queries, Only One SQL Connection Will Be Open, And All The Queries Will
+                Be Executed Within That SQL Session.
+            </para>
+            <list type="alertSet">
+                <item>
+                    <description>
+                        <para>AUTHOR:    Svetoslav Nedyalkov Savov (svesavov@hotmail.com)</para>
+                        <para>COPYRIGHT: (c) 2020 Svetoslav Nedyalkov Savov, all rights reserved.</para>
+                        <para>THIS CODE IS MADE AVAILABLE AS IS, WITHOUT WARRANTY OF ANY KIND. THE ENTIRE RISK</para>
+                        <para>OF THE USE OR THE RESULTS FROM THE USE OF THIS CODE REMAINS WITH THE USER.</para>
+                    </description>
+                </item>
+            </list>
+            <example>
+              <code>[System.Data.DataSet[]]$arrDataSet = Invoke-SnsSQLQuery -Query "Query" -Computer "computer.contoso.com" -DatabaseName "DatabaseName";</code>
+            </example>
+            <example>
+              <code>[System.Data.DataSet[]]$arrDataSet = Invoke-SnsSQLQuery -Query "Query" -Computer "computer.contoso.com" -DatabaseName "DatabaseName" -UserName "JohnSmith" -Password "Pa$$w0rd";</code>
+            </example>
+            <example>
+              <code>[System.Data.DataSet[]]$arrDataSet = Invoke-SnsSQLQuery -Query "Query" -Computer "computer.contoso.com" -DatabaseName "DatabaseName" -Credentials $objPsCredentials;</code>
+            </example>
+            <example>
+              <code>[System.Data.DataSet[]]$arrDataSet = Invoke-SnsSQLQuery -Query "Query" -Computer "computer.contoso.com" -DatabaseName "DatabaseName" -Credentials(Get-Credential);</code>
+            </example>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.InvokeSnsSQLQuery.Query">
+            <summary>
+            <para type="description">Specifies SQL Query</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.InvokeSnsSQLQuery.Computer">
+            <summary>
+            <para type="description">Specifies A SQL Server And SQL Instance In Format:</para>
+            <para type="description">"DataBase Server"</para>
+            <para type="description">"DataBase Server"\"DataBase Instance"</para>
+            <para type="description">"DataBase Server","Port Number"</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.InvokeSnsSQLQuery.DatabaseName">
+            <summary>
+            <para type="description">Specifies A DataBase Name</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.InvokeSnsSQLQuery.UserName">
+            <summary>
+            <para type="description">Specifies A UserName In Clear Text</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.InvokeSnsSQLQuery.Password">
+            <summary>
+            <para type="description">Specifies A Password In Clear Text</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.InvokeSnsSQLQuery.Credentials">
+            <summary>
+            <para type="description">Specifies A [System.Management.Automation.PSCredential] Object</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.InvokeSnsSQLQuery.UseCurrentLogOnSession">
+            <summary>
+            <para type="description">Specifies That Current User LogOnSession Will Be Used For The SQL Connection</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.InvokeSnsSQLQuery.TimeOut">
+            <summary>
+            <para type="description">Sets The Wait Time In Seconds Before Terminating The Attempt To Execute A Command And Generating An Error</para>
+            </summary>
+        </member>
+        <member name="T:SnsPsModule.NewSnsHtmlHeader">
+            <summary>
+            <para type="synopsis">CmdLet Designed To Prepare XHTML 1.0 Strict Web Page Header And CSS3 Template</para>
+            <para type="description">CmdLet Designed To Prepare XHTML 1.0 Strict Web Page Header And CSS3 Template</para>
+            <para type="description">
+            	Depending Of The Specified Parameters HTML Document Declaration Is Made As C# ASP.NET XHTML 1.0 Strict Document Or
+            	Normal XHTML 1.0 Strict HTML Document
+            </para>
+            <para type="description">
+            	In The HTML Header Section Are Prepared Place Holder Sections About ASP.NET C# Code Behind And JavaScript
+            	Functions Depending Of The Specified Parameters
+            </para>
+            <para type="description">
+            	The Paragraph Style With Class "Mail" Mimic Exactly The Outlook Font Font Size And Font Color For Replying And
+            	Forwarding Of Email Messages
+            </para>
+            <para type="description">
+            	The CmdLet Have Aliases CreateHtmlHeader And Create-HtmlHeader
+            </para>
+            <list type="alertSet">
+                <item>
+                    <description>
+                        <para>AUTHOR:    Svetoslav Nedyalkov Savov (svesavov@hotmail.com)</para>
+                        <para>COPYRIGHT: (c) 2020 Svetoslav Nedyalkov Savov, all rights reserved.</para>
+                        <para>THIS CODE IS MADE AVAILABLE AS IS, WITHOUT WARRANTY OF ANY KIND. THE ENTIRE RISK</para>
+                        <para>OF THE USE OR THE RESULTS FROM THE USE OF THIS CODE REMAINS WITH THE USER.</para>
+                    </description>
+                </item>
+            </list>
+            <example>
+              <code>[System.String]$strMessageBody = New-SnsHtmlHeader -ScriptName "$($Configuration.ScriptName)";</code>
+            </example>
+            <example>
+              <code>[System.String]$strMessageBody = New-SnsHtmlHeader -ScriptName "$($Configuration.ScriptName)" -CssLink "Styles.css" -CssFilePath "C:\inetpub\wwwroot\Styles.css"</code>
+            </example>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.NewSnsHtmlHeader.ScriptName">
+            <summary>
+            <para type="description">Specifies A Script Name</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.NewSnsHtmlHeader.Author">
+            <summary>
+            <para type="description">Specifies Author Of The HTML Document</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.NewSnsHtmlHeader.Doctype">
+            <summary>
+            <para type="description">Specifies HTML Doctype</para>
+            <para type="description">Values: XHTML1.0Strict, HTML4.01Strict And XHTML1.0Transitional</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.NewSnsHtmlHeader.AutoRefresh">
+            <summary>
+            <para type="description">Specifies The HTML AutoRefresh Time Interval In Seconds</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.NewSnsHtmlHeader.CssFilePath">
+            <summary>
+            <para type="description">Specifies To The CmdLet To Export The CSS3 Style On A File</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.NewSnsHtmlHeader.CssLink">
+            <summary>
+            <para type="description">Specifies To The CmdLet To Create A Link To The External CSS3 Style File</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.NewSnsHtmlHeader.InnerCss">
+            <summary>
+            <para type="description">Specifies To The CmdLet To Include The CSS3 Style Inside The HTML Document Header</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.NewSnsHtmlHeader.UsingAspx">
+            <summary>
+            <para type="description">Specifies To The CmdLet To Declare The Web Document As C# ASP.NET One And Insert C# Code Behind Place Holder</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.NewSnsHtmlHeader.UsingJavaScript">
+            <summary>
+            <para type="description">Specifies To The CmdLet To Insert JavaScript Place Holder</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.NewSnsHtmlHeader.AdditionalStyle">
+            <summary>
+            <para type="description">Specifies To The CmdLet Any Additional CSS3 Style</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.NewSnsHtmlHeader.CascadeTableRows">
+            <summary>
+            <para type="description">Specifies To Make Table Rows In Different Color Zebra Like</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.NewSnsHtmlHeader.MouseHover">
+            <summary>
+            <para type="description">Specifies To Table Cells To Change Their Color On Mouse Hover</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.NewSnsHtmlHeader.RedEmail">
+            <summary>
+            <para type="description">Specifies To Be Changed The Background Color And Font Color To Red Ones</para>
+            </summary>
+        </member>
+        <member name="T:SnsPsModule.NewSnsZipArchive">
+            <summary>
+            <para type="synopsis">
+                This CmdLet Provides Command Line Interface (CLI) To The Built Into MS Windows ZIP Functionality.
+            </para>
+            <para type="description">
+                This CmdLet Provides Command Line Interface (CLI) To The Built Into MS Windows ZIP Functionality.
+            </para>
+            <para type="description">
+                Installing Of 3rd Party Archiving Applications And Assigning ZIP File Extension To Them Might Disable The Built
+                Into MS Windows Archiving Functionality Irreversibly.
+                This Will Cause This CmdLet To Stop Working.
+            </para>
+            <list type="alertSet">
+                <item>
+                    <description>
+                        <para>AUTHOR:    Svetoslav Nedyalkov Savov (svesavov@hotmail.com)</para>
+                        <para>COPYRIGHT: (c) 2020 Svetoslav Nedyalkov Savov, all rights reserved.</para>
+                        <para>THIS CODE IS MADE AVAILABLE AS IS, WITHOUT WARRANTY OF ANY KIND. THE ENTIRE RISK</para>
+                        <para>OF THE USE OR THE RESULTS FROM THE USE OF THIS CODE REMAINS WITH THE USER.</para>
+                    </description>
+                </item>
+            </list>
+            <example>
+              <code>[System.String[]]$arrZipName = New-SnsZipArchive -Path 'C:\New folder';</code>
+            </example>
+            <example>
+              <code>[System.String[]]$arrZipName = New-SnsZipArchive -Path 'C:\Test1txt', 'C:\Test1txt';</code>
+            </example>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.NewSnsZipArchive.Path">
+            <summary>
+            <para type="description">Specifies The Full Absolute UNC File Or Folder Path</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.NewSnsZipArchive.PassThru">
+            <summary>
+            <para type="description">Specifies To The CmdLet To Revert A String Object</para>
+            <para type="description">The Reverted Object Is The Full Absolute UNC File Path To The Created ZIP File</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.NewSnsZipArchive.Force">
+            <summary>
+            <para type="description">Specifies To The CmdLet To Force Overwrite Of Any Existing ZIP File</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.NewSnsZipArchive.Keep">
+            <summary>
+            <para type="description">Specifies To The CmdLet To Preserve The Original Item</para>
+            <para type="description">Copy The Item Inside The ZIP File Instead Of Moving It</para>
+            </summary>
+        </member>
+        <member name="T:SnsPsModule.SearchSnsAdObject">
+            <summary>
+            <para type="synopsis">CmdLet Designed To Perform LDAP Search Against The AD Using .NET ADSI Adapter Provider.</para>
+            <para type="description">CmdLet Designed To Perform LDAP Search Against The AD Using .NET ADSI Adapter Provider.</para>
+            <para type="description">Depending Of The CmdLet Arguments Are Possible 6 Scenarios:</para>
+            <para type="description">
+                --Scenario 1 - Specified DcSearch Switch Specified Search Root And Specified Domain Controller.
+                The Search Is Performed Against The Domain Partition Of The Specified Domain Controller Using The Default LDAP
+                Ports.
+                The Search Is Restricted To The Specified Organizational Unit Or Container Or Domain.
+                This Is The Most Recommended Scenario For Using Of This CmdLet.
+            </para>
+            <para type="description">
+                --Scenario 2 - Specified DcSearch Switch Not Specified Search Root And Specified Domain Controller.
+                The Search Is Performed Against The Domain Partition Of The Specified Domain Controller Using The Default LDAP
+                Ports.
+                However Because The Search Root Is Mandatory For .NET The CmdLet Will Assume As A DcSearch Root The Root Of The
+                Logged On Domain And Will Specify It On Users Behalf.
+                This Option Shall Be Used With Extra Care In MultiDomain Forests Where The Logged With In Account Might Be In
+                Different Domain And The Search To Not Revert The Desired Results.
+            </para>
+            <para type="description">
+                --Scenario 3 - Specified DcSearch Switch Specified Search Root And Not Specified Domain Controller
+                The Search Is Performed Against The Domain Partition Of An Automatically Chosen by .NET Domain Controller Within
+                The Domain Used In The Specified SearchRoot Using The Default LDAP Ports.
+                The Search Is Restricted To The Specified Organizational Unit Or Container Or Domain.
+                Use This Scenario With Extra Care As It Might Lead To Unexpected Results Especially If You Try To Read Recent
+                Changes Not AD Replicated Yet.
+            </para>
+            <para type="description">
+                --Scenario 4 - Specified DcSearch Switch Not Specified Search Root And Not Specified Domain Controller.
+                Normally This Scenario Is Not Allowed However Because The DcSearch Is Specified The Function Assume That The
+                Search Have To Be Executed Against The Root Of The Currently Logged In Domain And Specify The Domain As SearchRoot
+                On Users Behalf.
+                The Remaining Considerations Are The Same Like The DcSearch Without Specified Domain Controller.
+            </para>
+            <para type="description">
+                --Scenario 5 - Specified GcSearch Switch Not Specified Search Root And Specified Domain Controller.
+                The Search Is Performed Against The Global Catalog Partition Of The Specified Domain Controller Using The Default
+                Global Catalog Ports.
+                The Search Is Not Restricted To Any Domain Or Organizational Unit Or Container.
+                If The Specified Domain Controller Is Not Global Catalog Server Then The Function Will Revert No Results Nor Error.
+                Use The Global Catalog Search With Extra Care It Looks Very Easy And Obvious Choice But It Might Revert Unexpected
+                Results Especially If The LDAP Query Contains Clauses Related With AD Attributes Not Present In The Global Catalog
+                Partition.
+                Additionally It Does Not Revert Properties Not Present In The Global Catalog Partition Even If They Are Specified
+                This Might Lead To Wrong Impression That Those Properties Are Empty.
+                It Is Always Preferable To Get A List With All The Domains And Domain Controllers Responsible For The
+                Corresponding Domains And Loop The Search Against Each Of Them Instead Using Global Catalog Search.
+                Another Known Issue Is when The Specified Global Catalog Server For The LDAP Search Temporary Have No Connection
+                To Some Of The Domains Then The Objects From That Domains Are Filtered.
+                Another Known Issue Is When The Specified Global Catalog Server Is Very Remote From Some Of The Domains The
+                Results Are Reverted Extremely Slow.
+            </para>
+            <para type="description">
+                --Scenario 6 - Specified ConnectionString.
+                In This Scenario The User May Specify Whatever Connection String Want Which In General Will Need To Apply To Some
+                Of The Scenarios Above.
+                The CmdLet Intendedly Was Created To Be Not Capable To Search Windows Local Security Object With The
+                ConnectionString Parameter It Is Still Possible.
+            </para>
+            <list type="alertSet">
+                <item>
+                    <description>
+                        <para>AUTHOR:    Svetoslav Nedyalkov Savov (svesavov@hotmail.com)</para>
+                        <para>COPYRIGHT: (c) 2020 Svetoslav Nedyalkov Savov, all rights reserved.</para>
+                        <para>THIS CODE IS MADE AVAILABLE AS IS, WITHOUT WARRANTY OF ANY KIND. THE ENTIRE RISK</para>
+                        <para>OF THE USE OR THE RESULTS FROM THE USE OF THIS CODE REMAINS WITH THE USER.</para>
+                    </description>
+                </item>
+            </list>
+            <example>
+              <code>[System.Object[]]$arrSearchResults = Search-SnsAdObject -LdapQuery $ldapQuery -DcSearch -DomainController "server1.contoso.com" -SearchRoot "DC=contoso,DC=com";</code>
+              <para>Run LDAP Query Against The Domain Partition Of Specified Domain Controller With Specified SearchRoot.</para>
+              <para></para>
+            </example>
+            <example>
+              <code>[System.Object[]]$arrSearchResults = Search-SnsAdObject -LdapQuery $ldapQuery -DcSearch -DomainController "server1.contoso.com";</code>
+              <para>Run LDAP Query Against The Domain Partition Of Specified Domain Controller Against The Current Domain.</para>
+              <para></para>
+            </example>
+            <example>
+              <code>[System.Object[]]$arrSearchResults = Search-SnsAdObject -LdapQuery $ldapQuery -DcSearch -SearchRoot "DC=contoso,DC=com";</code>
+              <para>Run LDAP Query Against The Domain Partition Of Random Domain Controller With Specified SearchRoot.</para>
+              <para></para>
+            </example>
+            <example>
+              <code>[System.Object[]]$arrSearchResults = Search-SnsAdObject -LdapQuery $ldapQuery -DcSearch;</code>
+              <para>Run LDAP Query Against The Domain Partition Of Random Domain Controller Against The Current Domain.</para>
+              <para></para>
+            </example>
+            <example>
+              <code>[System.Object[]]$arrSearchResults = Search-SnsAdObject -LdapQuery $ldapQuery -GcSearch -DomainController "server1.contoso.com";</code>
+              <para>Run LDAP Query Against The Global Partition Of Specified Domain Controller.</para>
+              <para></para>
+            </example>
+            <example>
+              <code>[System.Object[]]$arrSearchResults = Search-SnsAdObject -LdapQuery $ldapQuery -ConnectionString "LDAP://DC=contoso,DC=com";</code>
+              <para>Run LDAP Query Using The Specified Connection.</para>
+              <para></para>
+            </example>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.SearchSnsAdObject.LdapQuery">
+            <summary>
+            <para type="description">Specifies The LDAP Query</para>
+            <para type="description">The Query Must Comply With The Official Microsoft Recommendations https://bit.ly/2RFdUr2 </para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.SearchSnsAdObject.GcSearch">
+            <summary>
+            <para type="description">Specifies To The CmdLet To Execute Provided LDAP Query Against The Global Catalog Partition</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.SearchSnsAdObject.DcSearch">
+            <summary>
+            <para type="description">Specifies To The CmdLet To Execute Provided LDAP Query Against The Domain Partition</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.SearchSnsAdObject.SearchRoot">
+            <summary>
+            <para type="description">Specifies A Root Organizational Unit For The LDAP Search</para>
+            <para type="description">If Not Provided The LDAP Query Will Be Run Against The Current Domain</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.SearchSnsAdObject.DomainController">
+            <summary>
+            <para type="description">Specifies A Domain Controller Fully Qualified Domain Name</para>
+            <para type="description">If Not Provided The LDAP Query Will Be Run Against Random Domain Controller</para>
+            <para type="description">Delays Caused By The Domain Replication Have To Be Considered If Omitted</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.SearchSnsAdObject.ConnectionString">
+            <summary>
+            <para type="description">Specifies An AD Connection String</para>
+            <para type="description">For More Details Refer To MS Documentation https://bit.ly/2RGUIsO </para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.SearchSnsAdObject.ReturnProperties">
+            <summary>
+            <para type="description">Specifies Which AD Properties Will Be Included In The Output Search Object</para>
+            <para type="description">!!! Use It With Extra Care !!!</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.SearchSnsAdObject.ResultSize">
+            <summary>
+            <para type="description">Specifies A Maximum Number Of Object That AD Search Reverts</para>
+            <para type="description">The Restrictions From AD Side Are From 1 To 1000</para>
+            <para type="description">If Not Specified Will Be Used The Threshold Specified In The AD</para>
+            </summary>
+        </member>
+        <member name="T:SnsPsModule.SetRegistry">
+            <summary>
+            <para type="synopsis">CmdLet Designed To Modify Or Create Registry Values.</para>
+            <para type="description">CmdLet Designed To Modify Or Create Registry Values.</para>
+            <para type="description">The CmdLet Require The Run Space To Be Executed In Elevated Mode.</para>
+            <list type="alertSet">
+                <item>
+                    <description>
+                        <para>AUTHOR:    Svetoslav Nedyalkov Savov (svesavov@hotmail.com)</para>
+                        <para>COPYRIGHT: (c) 2020 Svetoslav Nedyalkov Savov, all rights reserved.</para>
+                        <para>THIS CODE IS MADE AVAILABLE AS IS, WITHOUT WARRANTY OF ANY KIND. THE ENTIRE RISK</para>
+                        <para>OF THE USE OR THE RESULTS FROM THE USE OF THIS CODE REMAINS WITH THE USER.</para>
+                    </description>
+                </item>
+            </list>
+            <example>
+              <code>[System.Boolean[]]$bolSetRegistry = Set-Registry -RegistryPath 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WinRM\Client' -RegistryName 'AllowBasic' -RegistryType 'DWord' -RegistryValue 1;</code>
+              <para></para>
+            </example>
+            <example>
+              <code>[System.Object[]]$objObject = Set-Registry -RegistryPath 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WinRM\Client' -RegistryName 'AllowBasic' -RegistryType 'DWord' -RegistryValue 1 -PassThru;</code>
+              <para></para>
+            </example>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.SetRegistry.RegistryPath">
+            <summary>
+            <para type="description">Specifies The Full Absolute UNC Registry Path</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.SetRegistry.RegistryName">
+            <summary>
+            <para type="description">Specifies The Name Of The Registry Key</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.SetRegistry.RegistryType">
+            <summary>
+            <para type="description">Specifies The Type Of The Registry Key</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.SetRegistry.RegistryValue">
+            <summary>
+            <para type="description">Specifies The Value Of The Registry Key</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.SetRegistry.AttemptsToMake">
+            <summary>
+            <para type="description">Specifies The Number Of Attempts That The CmdLet Have To Make Before To Consider The Fulfilment As Failed.</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.SetRegistry.Force">
+            <summary>
+            <para type="description">Forces The CmdLet To Create The Registry Key Value In Case Does Not Exist.</para>
+            </summary>
+        </member>
+        <member name="P:SnsPsModule.SetRegistry.PassThru">
+            <summary>
+            <para type="description">Specify The Parameter Whenever You Need The Function To Revert Output Object.</para>
+            </summary>
+        </member>
+    </members>
+</doc>
