@@ -3,7 +3,7 @@ General PowerShell Module
 
 1. Download SnsPsModule.zip
 2. Don't forget to check the .ZIP file for viruses and etc.
-3. File MD5 hash: 2C8CEE050112E650C586AF03F78EC22E
+3. File MD5 hash: 03EAFE221C0A8E4CF4721EA25E810561
 4. Unzip in one of the following folders depending of the preference:
 - C:\Users\UserName\Documents\WindowsPowerShell\Modules - Replace "UserName" with the actual username, If you want the module available for specific user
 - C:\Program Files\WindowsPowerShell\Modules - If you want the module to be available for all user on the machine
