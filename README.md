@@ -4,7 +4,15 @@
 
 
 # SnsPsModule
-### General Purpose PowerShell Module
+
+
+## Requirements
+
+* .NET Framework 4.5
+* PowerShell 4
+
+
+## Instructions
 
 1. Download SnsPsModule.zip.
 2. Don't forget to check the .ZIP file for viruses and etc.
