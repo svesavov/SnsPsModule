@@ -3,7 +3,6 @@
 
 
 # SnsPsModule
-=============
 ### General Purpose PowerShell Module
 
 1. Download SnsPsModule.zip
