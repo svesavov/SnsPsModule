@@ -18,3 +18,9 @@
 Get-ChildItem -Path "PathWhereModuleIsInstalled" -Recurse | Unblock-File
 ```
 6. Enjoy!
+
+
+## External Links
+
+- svesavov on GitHub: [https://github.com/svesavov](https://github.com/svesavov)
+- Svetoslav Savov on LinkedIn [https://www.linkedin.com/in/svetoslavsavov](https://www.linkedin.com/in/svetoslavsavov)
