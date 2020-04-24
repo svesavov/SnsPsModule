@@ -1,3 +1,4 @@
+
 ###### If you like it, please consider a beer.
 ###### [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://PayPal.Me/svesavov)
 
@@ -17,5 +18,3 @@
 Get-ChildItem -Path "PathWhereModuleIsInstalled" -Recurse | Unblock-File
 ```
 6. Enjoy!
-
-###### [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://PayPal.Me/svesavov)
