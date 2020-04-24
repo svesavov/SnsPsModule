@@ -1,4 +1,4 @@
-[go][![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://PayPal.Me/svesavov){:target="_blank" rel="noopener"}
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)][go](https://PayPal.Me/svesavov){:target="_blank"}
 
 
 # SnsPsModule
