@@ -1,7 +1,9 @@
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://PayPal.Me/svesavov)
+If you like it, please consider s beer.
 
 
-# SnsPsModule
+SnsPsModule
+=============
 General PowerShell Module
 
 1. Download SnsPsModule.zip
@@ -14,4 +16,3 @@ General PowerShell Module
 5. Run the following command replacing "PathWhereModuleIsInstalled" with the actual path where the module files were unzipped.
 Get-ChildItem -Path "PathWhereModuleIsInstalled" -Recurse | Unblock-File
 6. Enjoy
-7. If you like it, please consider small amount donation.
