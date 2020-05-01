@@ -16,7 +16,7 @@
 
 1. Download SnsPsModule.zip.
 2. Don't forget to check the .ZIP file for viruses and etc.
-3. File MD5 hash: `D2E13AA9D5934C04500117441020D400`
+3. File MD5 hash: `39273C0A0BFA050DFF3ACF2982F70BFD`
 4. Unzip in one of the following folders depending of your preference:
 * `C:\Users\UserName\Documents\WindowsPowerShell\Modules` - Replace "UserName" with the actual username, If you want the module to be available for specific user.
 * `C:\Program Files\WindowsPowerShell\Modules` - If you want the module to be available for all users on the machine.
