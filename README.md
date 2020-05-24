@@ -21,7 +21,7 @@ Install-Module "SnsPsModule" -Scope "AllUsers";
 OR
 1. Download SnsPsModule.zip.
 2. Don't forget to check the .ZIP file for viruses and etc.
-3. File MD5 hash: `A077A2BDE0A7BD119021C9E30EAA054F`
+3. File MD5 hash: `2556F81AF47DBC98A3F62DC6C0D60B9D`
 4. Unzip in one of the following folders depending of your preference:
 * `C:\Users\UserName\Documents\WindowsPowerShell\Modules` - Replace "UserName" with the actual username, If you want the module to be available for specific user.
 * `C:\Program Files\WindowsPowerShell\Modules` - If you want the module to be available for all users on the machine.
