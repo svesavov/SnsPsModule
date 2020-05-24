@@ -36,4 +36,5 @@ Get-ChildItem -Path "PathWhereModuleIsInstalled" -Recurse | Unblock-File
 ## External Links
 
 - svesavov on GitHub: [https://github.com/svesavov](https://github.com/svesavov)
+- svesavov on PowerShell Gallery: [https://www.powershellgallery.com/packages/SnsPsModule/](https://www.powershellgallery.com/packages/SnsPsModule/)
 - Svetoslav Savov on LinkedIn [https://www.linkedin.com/in/svetoslavsavov](https://www.linkedin.com/in/svetoslavsavov)
