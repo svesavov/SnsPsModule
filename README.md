@@ -72,6 +72,8 @@ Get-Help Set-SnsAdInt32Attribute -Full;
 Get-Help Set-SnsAdMultiValuedStringAttribute -Full;
 Get-Help Set-SnsAdStringAttribute -Full;
 Get-Help Set-SnsRegistry -Full;
+```
+
 
 ## External Links
 
