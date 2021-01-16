@@ -73,6 +73,7 @@ Get-Help Set-SnsAdMultiValuedStringAttribute -Full;
 Get-Help Set-SnsAdStringAttribute -Full;
 Get-Help Set-SnsRegistry -Full;
 Get-Help New-SnsChart -Full;
+Get-Help New-SnsPieChart -Full;
 ```
 
 
