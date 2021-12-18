@@ -21,7 +21,7 @@ Install-Module "SnsPsModule" -Scope "AllUsers";
 OR
 1. Download SnsPsModule.zip.
 2. Don't forget to check the .ZIP file for viruses and etc.
-3. File MD5 hash: `8AEFD2CBE5483A97E5CE0464FB387C05`
+3. File MD5 hash: `BF6BB5093C62B3EFD9CC72A155B9D252`
 4. Unzip in one of the following folders depending of your preference:
 * `C:\Users\UserName\Documents\WindowsPowerShell\Modules` - Replace "UserName" with the actual username, If you want the module to be available for specific user.
 * `C:\Program Files\WindowsPowerShell\Modules` - If you want the module to be available for all users on the machine.
@@ -34,6 +34,36 @@ Get-ChildItem -Path "PathWhereModuleIsInstalled" -Recurse | Unblock-File
 
 For additional information, please use the CmdLets built-in help.
 ```powershell
+Get-Help Add-SnsAdGroupMember -Full;
+Get-Help Add-SnsAdMultiValuedStringAttributeValue -Full;
+Get-Help Clear-SnsAdAttribute -Full;
+Get-Help ConvertFrom-SnsIADsLargeInteger -Full;
+Get-Help ConvertFrom-SnsIpAddressString -Full;
+Get-Help Get-SnsWebPage -Full;
+Get-Help Invoke-SnsSQLQuery -Full;
+Get-Help Move-SnsAdObject -Full;
+Get-Help New-SnsAdObject -Full;
+Get-Help New-SnsChart -Full;
+Get-Help New-SnsHtmlHeader -Full;
+Get-Help New-SnsPassword -Full;
+Get-Help New-SnsPieChart -Full;
+Get-Help New-SnsZipArchive -Full;
+Get-Help Remove-SnsAdGroupMember -Full;
+Get-Help Remove-SnsAdMultiValuedStringAttributeValue -Full;
+Get-Help Remove-SnsAdObject -Full;
+Get-Help Rename-SnsAdObject -Full;
+Get-Help Reset-SnsAdPassword -Full;
+Get-Help Search-SnsAdObject -Full;
+Get-Help Set-SnsAdBooleanAttribute -Full;
+Get-Help Set-SnsAdByteAttribute -Full;
+Get-Help Set-SnsAdIadsiLargeIntegerAttribute -Full;
+Get-Help Set-SnsAdInt32Attribute -Full;
+Get-Help Set-SnsAdMultiValuedStringAttribute -Full;
+Get-Help Set-SnsAdProtectFromAccidentalDeletion -Full;
+Get-Help Set-SnsAdStringAttribute -Full;
+Get-Help Set-SnsAdUserMustChangePassword -Full;
+Get-Help Set-SnsRegistry -Full;
+
 Get-Help Assert-SnsDirectAssignedLicense -Full;
 Get-Help Assert-SnsGroupBasedLicense -Full;
 Get-Help Connect-SnsAzureAd -Full;
@@ -52,28 +82,6 @@ Get-Help Get-SnsAdAttribute -Full;
 Get-Help Get-SnsAdGroupMembers -Full;
 Get-Help Import-SnsCredentialFile -Full;
 Get-Help New-SnsTemporaryPsDrive -Full;
-Get-Help Add-SnsAdGroupMember -Full;
-Get-Help Add-SnsAdMultiValuedStringAttributeValue -Full;
-Get-Help Clear-SnsAdAttribute -Full;
-Get-Help ConvertFrom-SnsIADsLargeInteger -Full;
-Get-Help ConvertFrom-SnsIpAddressString -Full;
-Get-Help Get-SnsWebPage -Full;
-Get-Help Invoke-SnsSQLQuery -Full;
-Get-Help Move-SnsAdObject -Full;
-Get-Help New-SnsHtmlHeader -Full;
-Get-Help New-SnsZipArchive -Full;
-Get-Help Remove-SnsAdGroupMember -Full;
-Get-Help Remove-SnsAdMultiValuedStringAttributeValue -Full;
-Get-Help Search-SnsAdObject -Full;
-Get-Help Set-SnsAdBooleanAttribute -Full;
-Get-Help Set-SnsAdByteAttribute -Full;
-Get-Help Set-SnsAdIadsiLargeIntegerAttribute -Full;
-Get-Help Set-SnsAdInt32Attribute -Full;
-Get-Help Set-SnsAdMultiValuedStringAttribute -Full;
-Get-Help Set-SnsAdStringAttribute -Full;
-Get-Help Set-SnsRegistry -Full;
-Get-Help New-SnsChart -Full;
-Get-Help New-SnsPieChart -Full;
 ```
 
 
